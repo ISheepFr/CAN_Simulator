@@ -15,6 +15,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 add_executable(CAN_SIM
   src/main.cpp
   src/can/CANFrame.h src/can/CANFrame.cpp
+  src/can/CANNode.h src/can/CANNode.cpp
 
 
 )

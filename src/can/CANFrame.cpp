@@ -1,6 +1,12 @@
 #include "CANFrame.h"
 
-CANFrame::CANFrame(uint32_t id, const QByteArray& data): d_id{id},d_data{data},d_dlc(static_cast<uint8_t>(data.size())),d_timestamp(QDateTime::currentDateTime())
+CANFrame::CANFrame(uint32_t id, const QByteArray& data, bool isExtended, bool isRTR):
+    d_id{id},
+    d_data{data},
+    d_dlc(static_cast<uint8_t>(data.size())),
+    d_timestamp(QDateTime::currentDateTime()),
+    d_isExtended{isExtended},
+    d_isRTR{isRTR}
 {
 
 }
@@ -28,4 +34,9 @@ QByteArray CANFrame::getD_data() const
 QDateTime CANFrame::getD_timestamp() const
 {
     return d_timestamp;
+}
+
+bool CANFrame::getD_isExtended() const
+{
+    return d_isExtended;
 }
