@@ -1,4 +1,8 @@
-#include <QCoreApplication>
+//#include <QCoreApplication>
+#include <QtGui/QGuiApplication>
+#include <QtQml/QQmlApplicationEngine>
+#include <QtQml/QQmlContext>
+
 #include <QDebug>
 
 #include "can/CANFrame.h"
@@ -45,7 +49,8 @@ public:
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    //QCoreApplication a(argc, argv);
+    QGuiApplication a(argc,argv);
 
     CANBus my_can_bus;
 
@@ -53,12 +58,18 @@ int main(int argc, char *argv[])
     //DummyNode_2 my_dummy_node_2(&my_can_bus);
 
     DashBoard my_dashboard(&my_can_bus);
-    EngineECU my_ecu(&my_can_bus,1000);
+    EngineECU my_ecu(&my_can_bus,500);
 
     my_can_bus.attachNode(&my_dashboard);
     my_can_bus.attachNode(&my_dummy_node);
     my_can_bus.attachNode(&my_ecu);
     //my_can_bus.attachNode(&my_dummy_node_2);
+
+    QQmlApplicationEngine engineQml;
+    engineQml.rootContext()->setContextProperty("dashboard", &my_dashboard);
+
+    engineQml.load(QUrl(QStringLiteral("qrc:/CanDashboard/src/main.qml")));
+
 
     CANFrame f_0x123 = CANFrame(0x123,QByteArray::fromHex("11223344"));
     CANFrame f_0x012 = CANFrame(0x12,QByteArray::fromHex("112233"),true,true);
