@@ -5,6 +5,9 @@
 #include "can/CANNode.h"
 #include "can/CANBus.h"
 #include "nodes/DashBoard.h"
+#include "nodes/EngineECU.h"
+
+#include <QByteArray>
 
 class DummyNode : public CANNode
 {
@@ -12,12 +15,16 @@ public:
     DummyNode(CANBus* bus): CANNode("dummy",bus){}
     void receiveFrame(const CANFrame& frame) override
     {
-        qDebug() << "[DummyNode] Received ID:"
-                 << QString("0x%1").arg(frame.getD_id(),0,16)
-                 << "DLC:" << frame.getD_dlc()
-                 << "DATA:" << frame.getD_data().toHex()
-                 << "RTR:" << frame.getD_isRTR()
-                 << "EXT:" << frame.getD_isExtended();
+        if((frame.getD_id()) != 0x100)
+        {
+            qDebug() << "[DummyNode] Received ID:"
+                     << QString("0x%1").arg(frame.getD_id(),0,16)
+                     << "DLC:" << frame.getD_dlc()
+                     << "DATA:" << frame.getD_data().toHex()
+                     << "RTR:" << frame.getD_isRTR()
+                     << "EXT:" << frame.getD_isExtended();
+        }
+
     }
 };
 
@@ -43,19 +50,21 @@ int main(int argc, char *argv[])
     CANBus my_can_bus;
 
     DummyNode my_dummy_node(&my_can_bus);
-    DummyNode_2 my_dummy_node_2(&my_can_bus);
+    //DummyNode_2 my_dummy_node_2(&my_can_bus);
 
     DashBoard my_dashboard(&my_can_bus);
+    EngineECU my_ecu(&my_can_bus,1000);
 
     my_can_bus.attachNode(&my_dashboard);
     my_can_bus.attachNode(&my_dummy_node);
-    my_can_bus.attachNode(&my_dummy_node_2);
+    my_can_bus.attachNode(&my_ecu);
+    //my_can_bus.attachNode(&my_dummy_node_2);
 
-    CANFrame *f_0x123 = new CANFrame(0x123,QByteArray::fromHex("11223344"));
-    CANFrame *f_0x012 = new CANFrame(0x12,QByteArray::fromHex("112233"),true,true);
+    CANFrame f_0x123 = CANFrame(0x123,QByteArray::fromHex("11223344"));
+    CANFrame f_0x012 = CANFrame(0x12,QByteArray::fromHex("112233"),true,true);
 
-    my_dummy_node.sendFrame(*f_0x123);
-    my_dashboard.sendFrame(*f_0x012);
+    my_dummy_node.sendFrame(f_0x123);
+    my_dashboard.sendFrame(f_0x012);
 
     return a.exec();
 }

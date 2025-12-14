@@ -18,6 +18,7 @@ add_executable(CAN_SIM
   src/can/CANNode.h src/can/CANNode.cpp
   src/can/CANBus.h src/can/CANBus.cpp
   src/nodes/DashBoard.h src/nodes/DashBoard.cpp
+  src/nodes/EngineECU.h src/nodes/EngineECU.cpp
 
 
 )

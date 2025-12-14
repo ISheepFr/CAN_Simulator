@@ -11,6 +11,7 @@ public:
     explicit DashBoard(CANBus* bus);
 
     void receiveFrame(const CANFrame& frame) override;
+    QString decodeData(const QByteArray& data);
 
 };
 
