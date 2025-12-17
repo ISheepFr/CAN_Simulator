@@ -10,6 +10,7 @@
 #include "can/CANBus.h"
 #include "nodes/DashBoard.h"
 #include "nodes/EngineECU.h"
+#include "nodes/CANMonitor.h"
 
 #include <QByteArray>
 
@@ -58,17 +59,21 @@ int main(int argc, char *argv[])
     //DummyNode_2 my_dummy_node_2(&my_can_bus);
 
     DashBoard my_dashboard(&my_can_bus);
-    EngineECU my_ecu(&my_can_bus,500);
+    EngineECU my_ecu(&my_can_bus,1000);
+    CANMonitor my_can_monitor(&my_can_bus);
 
     my_can_bus.attachNode(&my_dashboard);
     my_can_bus.attachNode(&my_dummy_node);
     my_can_bus.attachNode(&my_ecu);
+    my_can_bus.attachNode(&my_can_monitor);
     //my_can_bus.attachNode(&my_dummy_node_2);
 
     QQmlApplicationEngine engineQml;
     engineQml.rootContext()->setContextProperty("dashboard", &my_dashboard);
+    engineQml.rootContext()->setContextProperty("canmonitor", &my_can_monitor);
 
     engineQml.load(QUrl(QStringLiteral("qrc:/CanDashboard/src/main.qml")));
+    engineQml.load(QUrl(QStringLiteral("qrc:/CanDashboard/src/CANMonitor/CANMonitorWindow.qml")));
 
 
     CANFrame f_0x123 = CANFrame(0x123,QByteArray::fromHex("11223344"));

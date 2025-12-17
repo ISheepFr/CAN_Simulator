@@ -25,6 +25,7 @@ qt_add_executable(CAN_SIM
   src/can/CANBus.h src/can/CANBus.cpp
   src/nodes/DashBoard.h src/nodes/DashBoard.cpp
   src/nodes/EngineECU.h src/nodes/EngineECU.cpp
+  src/nodes/CANMonitor.h src/nodes/CANMonitor.cpp
 )
 
 qt_add_qml_module(CAN_SIM
@@ -32,7 +33,9 @@ qt_add_qml_module(CAN_SIM
     VERSION 1.0
     QML_FILES
         src/main.qml
+        src/CANMonitor/CANMonitorWindow.qml
 )
+
 
 #target_link_libraries(CAN_SIM Qt${QT_VERSION_MAJOR}::Core)
 target_include_directories(CAN_SIM PRIVATE

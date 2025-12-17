@@ -7,9 +7,9 @@
 
 class CANBus;
 
-class CANNode : public QObject
+class CANNode //: public QObject
 {
-    Q_OBJECT
+    //Q_OBJECT
 public:
     explicit CANNode(const QString& name, CANBus* bus);
     virtual ~CANNode() = default;

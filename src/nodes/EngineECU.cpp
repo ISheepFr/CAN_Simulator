@@ -10,7 +10,7 @@ EngineECU::EngineECU(CANBus* bus, int periodMS)
     d_temp{0},
     d_load{0}
 {
-    connect(&d_timer, &QTimer::timeout,this, &EngineECU::sendEngineFrame);
+    QObject::connect(&d_timer, &QTimer::timeout,this, &EngineECU::sendEngineFrame);
     d_timer.start(periodMS);
 
 }

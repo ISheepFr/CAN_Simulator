@@ -5,7 +5,7 @@
 #include "../can/CANNode.h"
 #include <QTimer>
 
-class EngineECU : public CANNode
+class EngineECU : public QObject, public CANNode
 {
     Q_OBJECT
 public:

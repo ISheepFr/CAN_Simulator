@@ -4,7 +4,7 @@
 #include "../can/CANNode.h"
 #include "QDebug"
 
-class DashBoard : public CANNode
+class DashBoard : public QObject, public CANNode
 {
     Q_OBJECT
     Q_PROPERTY(int rpm READ getD_rpm NOTIFY engineDataChanged)
