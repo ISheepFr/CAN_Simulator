@@ -12,6 +12,11 @@ ApplicationWindow {
         spacing: 20
 
         Text {
+            text: "SPEED: " + dashboard.speed
+            font.pixelSize: 30
+        }
+
+        Text {
             text: "RPM: " + dashboard.rpm
             font.pixelSize: 28
         }
@@ -22,7 +27,7 @@ ApplicationWindow {
         }
 
         Text {
-            text: "Charge: " + dashboard.load + " %"
+            text: "Charge: " + Math.round(dashboard.load * 100 / 255) + " %"
             font.pixelSize: 22
         }
     }

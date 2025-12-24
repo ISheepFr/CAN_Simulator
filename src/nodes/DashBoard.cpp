@@ -25,8 +25,9 @@ void DashBoard::receiveFrame(const CANFrame& frame)
 void DashBoard::decodeEngineData(const QByteArray& data)
 {
     d_rpm = (static_cast<uint8_t>(data[0]) << 8) | (static_cast<uint8_t>(data[1]));
-    d_temp = (static_cast<uint8_t>(data[2]));
-    d_load = (static_cast<uint8_t>(data[3]));
+    d_load = (static_cast<uint8_t>(data[2]));
+    d_temp = (static_cast<uint8_t>(data[3]));
+    d_speed = (static_cast<uint8_t>(data[4]) << 8) | (static_cast<uint8_t>(data[5]));
 }
 
 int DashBoard::getD_rpm() const
@@ -42,6 +43,11 @@ int DashBoard::getD_temp() const
 int DashBoard::getD_load() const
 {
     return d_load;
+}
+
+int DashBoard::getD_speed() const
+{
+    return d_speed;
 }
 
 

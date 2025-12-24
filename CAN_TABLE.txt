@@ -1,0 +1,7 @@
+ID (hex);Émetteur (ECU);Nom signal;Période;DLC;Description
+0x070;BrakeECU;BrakeStatus;10 ms;2;Frein appuyé + pression
+0x090;PedalECU;PedalPosition;10 ms;3;Position pédale (A/B + valid)
+0x100;EngineECU;EngineTorque;20 ms;2;Couple demandé / réel
+0x120;EngineECU;EngineStatus;20 ms;6;RPM, vitesse, température
+0x300;BodyECU;TurnSignals;100 ms;1;Clignotants
+0x400;Dashboard;DisplayRequest;100 ms;1;Requête affichage (optionnel)

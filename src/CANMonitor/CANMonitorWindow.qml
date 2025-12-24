@@ -23,6 +23,23 @@ ApplicationWindow {
             model: canmonitor
             clip: true
 
+            ScrollBar.vertical: ScrollBar {
+                id: tableVerticalBar
+                policy: ScrollBar.AlwaysOn
+            }
+
+            columnWidthProvider: function (column) {
+                switch (column) {
+                case 0: return 80    // Id
+                case 1: return 50    // Dlc
+                case 2: return 260   // Data (plus large)
+                case 3: return 50    // Rtr
+                case 4: return 50    // Ext
+                case 5: return 120   // Time
+                default: return 100
+                }
+            }
+
             delegate: Rectangle {
                 implicitHeight: 28
                 implicitWidth: 120
@@ -34,16 +51,21 @@ ApplicationWindow {
                     font.pixelSize: 12
                 }
             }
+
+
         }
+        Connections {
+                target: canmonitor
 
-        /*Rectangle{
-            anchors.fill: parent
-            id: rec
-            color: "red"
-            width: 100
-            height: 100
+                function onRowsInserted(parent, first, last) {
+                    Qt.callLater(function () {
+                                    table.contentY = table.contentHeight - table.height
+                                })
+                }
+            }
 
-        }*/
+
+
     }
 
 

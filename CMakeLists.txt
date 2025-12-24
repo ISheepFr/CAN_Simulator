@@ -26,6 +26,7 @@ qt_add_executable(CAN_SIM
   src/nodes/DashBoard.h src/nodes/DashBoard.cpp
   src/nodes/EngineECU.h src/nodes/EngineECU.cpp
   src/nodes/CANMonitor.h src/nodes/CANMonitor.cpp
+  src/nodes/PedalECU.h src/nodes/PedalECU.cpp
 )
 
 qt_add_qml_module(CAN_SIM
@@ -34,6 +35,7 @@ qt_add_qml_module(CAN_SIM
     QML_FILES
         src/main.qml
         src/CANMonitor/CANMonitorWindow.qml
+        src/Window/PedalWindow.qml
 )
 
 
