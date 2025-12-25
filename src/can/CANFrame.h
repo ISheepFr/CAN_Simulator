@@ -9,6 +9,7 @@ class CANFrame
 {
 public:
     CANFrame(uint32_t id, const QByteArray& data, bool isExtended=false, bool d_isRTR=false);
+    CANFrame();
 
     uint32_t getD_id() const;
     bool getD_isRTR() const;

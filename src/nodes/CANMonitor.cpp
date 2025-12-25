@@ -7,9 +7,37 @@ CANMonitor::CANMonitor(CANBus* bus, QObject *parent):
 
 }
 
+bool CANMonitor::lastByIdMode() const
+{
+    return d_mode == DisplayMode::LastById;
+}
+void CANMonitor::setLastByIdMode(bool enabled)
+{
+    DisplayMode newMode = enabled ? DisplayMode::LastById
+                                  : DisplayMode::Trace;
+
+    if (newMode == d_mode)
+        return;
+
+    beginResetModel();
+    d_mode = newMode;
+    d_changedIds.clear();
+    endResetModel();
+
+    emit modeChanged();
+}
+
 int CANMonitor::rowCount(const QModelIndex &parent) const
 {
-    return d_frames.size();
+    if(d_mode == DisplayMode::Trace)
+    {
+        return d_frames.size();
+    }
+    else
+    {
+        return d_lastFrames.size();
+    }
+
 }
 
 int CANMonitor::columnCount(const QModelIndex &parent) const
@@ -19,10 +47,10 @@ int CANMonitor::columnCount(const QModelIndex &parent) const
 
 QVariant CANMonitor::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid())
-        return {};
-
-    const auto& f = d_frames[index.row()];
+    const CANFrame& f =
+        (d_mode == DisplayMode::Trace)
+            ? d_frames[index.row()]
+            : d_lastFrames.values()[index.row()];
 
     /*        Id,
         Dlc,
@@ -69,10 +97,33 @@ QVariant CANMonitor::headerData(int section, Qt::Orientation orientation, int ro
 
 void CANMonitor::receiveFrame(const CANFrame &frame)
 {
-    int row = d_frames.size();
-    beginInsertRows(QModelIndex(),row,row);
-    d_frames.append(frame);
-    endInsertRows();
+    if(d_mode == DisplayMode::Trace)
+    {
+        int row = d_frames.size();
+        beginInsertRows(QModelIndex(),row,row);
+        d_frames.append(frame);
+        endInsertRows();
+    }
 
-    d_lastById.insert(frame.getD_id(),frame);
+    else
+    {
+        uint32_t id = frame.getD_id();
+        if(d_lastFrames.contains(id))
+        {
+            if(d_lastFrames[id].getD_data() != frame.getD_data())
+            {
+                d_lastFrames[id] = frame;
+                d_changedIds.insert(id);
+
+                int row = d_lastFrames.keys().indexOf(id);
+                emit dataChanged(index(row,0),index(row,columnCount()-1));
+            }
+        }
+        else
+        {
+            beginInsertRows(QModelIndex(), d_lastFrames.size(),d_lastFrames.size());
+            d_lastFrames.insert(id,frame);
+            endInsertRows();
+        }
+    }
 }

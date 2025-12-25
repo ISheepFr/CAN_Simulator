@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-
 Window {
     width: 300
     height: 200
@@ -23,6 +22,18 @@ Window {
             onValueChanged: pedal.pedal = value
         }
 
+        Text {
+            text: "BRAKE: " + Math.round((brake.brake*100)/255) + "%"
+            font.pixelSize: 20
+        }
+
+        Slider {
+            from: 0
+            to: 255
+            value: brake.brake
+            onValueChanged: brake.brake = value
+        }
+
         Rectangle{
             color: "red"
             width: 100
@@ -37,9 +48,9 @@ Window {
                     running: true
                     onTriggered: {
                         if (parent.pressed) {
-                            pedal.pedal = Math.min(pedal.pedal + 1, 255)
+                            //brake.brake = Math.min(brake.brake + 1, 255)
                         } else {
-                            pedal.pedal = Math.max(pedal.pedal - 1, 0)
+                            //brake.brake = Math.max(brake.brake - 1, 0)
                         }
                     }
                 }

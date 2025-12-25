@@ -36,6 +36,7 @@ qt_add_qml_module(CAN_SIM
         src/main.qml
         src/CANMonitor/CANMonitorWindow.qml
         src/Window/PedalWindow.qml
+        SOURCES src/nodes/BrakeECU.h src/nodes/BrakeECU.cpp
 )
 
 

@@ -1,5 +1,8 @@
 #include "CANFrame.h"
+CANFrame::CANFrame()
+{
 
+}
 CANFrame::CANFrame(uint32_t id, const QByteArray& data, bool isExtended, bool isRTR):
     d_id{id},
     d_data{data},

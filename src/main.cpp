@@ -11,6 +11,8 @@
 #include "nodes/DashBoard.h"
 #include "nodes/EngineECU.h"
 #include "nodes/PedalECU.h"
+#include "nodes/BrakeECU.h"
+
 #include "nodes/CANMonitor.h"
 
 #include <QByteArray>
@@ -24,8 +26,9 @@ int main(int argc, char *argv[])
 
     DashBoard my_dashboard(&my_can_bus);
 
-    EngineECU my_engine_ecu(&my_can_bus,1000,10);
-    PedalECU my_pedal_ecu(&my_can_bus,1000);
+    EngineECU my_engine_ecu(&my_can_bus,10,10);
+    PedalECU my_pedal_ecu(&my_can_bus,10);
+    BrakeECU my_brake_ecu(&my_can_bus,10);
 
     CANMonitor my_can_monitor(&my_can_bus);
 
@@ -33,6 +36,7 @@ int main(int argc, char *argv[])
 
     my_can_bus.attachNode(&my_engine_ecu);
     my_can_bus.attachNode(&my_pedal_ecu);
+    my_can_bus.attachNode(&my_brake_ecu);
 
     my_can_bus.attachNode(&my_can_monitor);
 
@@ -40,6 +44,8 @@ int main(int argc, char *argv[])
     engineQml.rootContext()->setContextProperty("dashboard", &my_dashboard);
     engineQml.rootContext()->setContextProperty("canmonitor", &my_can_monitor);
     engineQml.rootContext()->setContextProperty("pedal", &my_pedal_ecu);
+    engineQml.rootContext()->setContextProperty("brake", &my_brake_ecu);
+
 
     engineQml.load(QUrl(QStringLiteral("qrc:/CanDashboard/src/main.qml")));
     engineQml.load(QUrl(QStringLiteral("qrc:/CanDashboard/src/CANMonitor/CANMonitorWindow.qml")));
